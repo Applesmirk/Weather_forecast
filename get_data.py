@@ -5,7 +5,12 @@ from zipfile import ZipFile
 def get_name(station_id,url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"):
     """
     geting the name of the zip file from the dwd
+    expects: 
+        station_id must be integer 
+        url (optional) if zip lies somewhere else then the default path of the dwd
     """
+    if isinstance(station_id,int) != True : raise TypeError ("station_id must be of type integer")
+
     #get text from url 
     html = requests.get(url).text  
     html = str(html)
@@ -25,7 +30,12 @@ def get_name(station_id,url = "https://opendata.dwd.de/climate_environment/CDC/o
 def get_file(name, url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"): 
     """
     downloading file from dwd server and saving it in wd 
+    expects: 
+        name must be string
+        url (optional, string) if zip lies somewhere else then the default path of the dwd
+    
     """
+    if isinstance(name,str) != True : raise TypeError("name must be of type string")
 
     response = requests.get(url + name, stream=True)
     handle = open(name, "wb")
@@ -37,7 +47,11 @@ def get_file(name, url = "https://opendata.dwd.de/climate_environment/CDC/observ
 def create_datafile(zipname):
     """
     creating the daten.txt file from the downloaded zipfile
+    expects: 
+        zipname must be string
     """
+    if isinstance(zipname,str) != True : raise TypeError("zipname must be of type string")
+
     ids = zipname.split('_')
     date0 = ids[3]
     date1 = ids[4]
@@ -58,15 +72,18 @@ def create_datafile(zipname):
     os.rename(filename, f'daten_{station_ID}.txt')#rename file to daten.txt
 
 
-def download_id(id,url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"): 
+def download_id(station_id,url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"): 
     """
     downlaoding and creating data file for given id 
+    expects: 
+        station_id must be integer 
+        url (optional) if zip lies somewhere else then the default path of the dwd
     """
     
-    if isinstance(id,int) != True : raise TypeError ("id must be of type integer")
+    if isinstance(station_id,int) != True : raise TypeError ("station_id must be of type integer")
     
     #geting the name of the corresponding zip file 
-    name = get_name(id, url) 
+    name = get_name(station_id, url) 
 
     #downloading the zip file 
     print("--- downloading file ",name," ---")
@@ -79,4 +96,4 @@ def download_id(id,url = "https://opendata.dwd.de/climate_environment/CDC/observ
 
 if __name__ == "__main__":    
     
-    
+    download_id(4104)
