@@ -1,6 +1,6 @@
 import csv
 
-def read_data(keys = ['MESS_DATUM','TMK','SDK'],station_id):
+def read_data(station_id, keys = ['MESS_DATUM','TMK','SDK']):
     """
     input a list of keywords to get list of data provided from a file 'daten.txt'
     expects:
@@ -21,6 +21,7 @@ def read_data(keys = ['MESS_DATUM','TMK','SDK'],station_id):
             'TXK' Tagesmaximum der Lufttemperatur 2m Höhe in °C
             'TNK' Tagesminimum der Lufttemperatur 2m Höhe in °C
             'TGK' Minimum der Lufttemperatur am Erdboden 5cm Höhe in °C
+            
         station_id: ID of the weather station
     """
 
@@ -40,5 +41,5 @@ def read_data(keys = ['MESS_DATUM','TMK','SDK'],station_id):
     return data
 
 
-data = read_data(['MESS_DATUM','TMK'],4104)
+data = read_data(4104)
 print(data[-1])
