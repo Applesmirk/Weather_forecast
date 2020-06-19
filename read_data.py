@@ -49,7 +49,7 @@ def read_data(station_id, keys = ['MESS_DATUM','TMK','SDK'],check = False):
                 data[i].append(row[key])
             i += 1
     if check: check_data(data)
-    return data
+    return np.array(data)
 
 #returning every date inbetween two dates
 def daterange(date1, date2):
