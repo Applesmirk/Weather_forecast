@@ -2,7 +2,6 @@ import requests
 import os 
 from zipfile import ZipFile
 
-
 def get_name(station_id,url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"):
     """
     geting the name of the zip file from the dwd
@@ -23,7 +22,17 @@ def get_name(station_id,url = "https://opendata.dwd.de/climate_environment/CDC/o
     #returning the whole filename 
     return ("tageswerte" + station_id + html[station_id_found + 9 : station_id_found + 36])
     
- 
+def get_file(name, url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"): 
+    """
+    downloading file from dwd server and saving it in wd 
+    """
+
+    response = requests.get(url + name, stream=True)
+    handle = open(name, "wb")
+    for chunk in response.iter_content(chunk_size=512):
+        if chunk:  # filter out keep-alive new chunks
+            handle.write(chunk)
+    handle.close()
 
 def create_datafile(zipname):
     """
@@ -48,26 +57,26 @@ def create_datafile(zipname):
             
     os.rename(filename, f'daten_{station_ID}.txt')#rename file to daten.txt
 
-def get_file(name,url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"): 
-    """
-    downloading file from dwd server 
-    """
-    target_path= name
-        
-    response = requests.get(url, stream=True)
-    handle = open(target_path, "wb")
-    for chunk in response.iter_content(chunk_size=512):
-        if chunk:  # filter out keep-alive new chunks
-            handle.write(chunk)
-    handle.close()
-    
-   
 
+def download_id(id,url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/"): 
+    """
+    downlaoding and creating data file for given id 
+    """
+    
+    if isinstance(id,int) != True : raise TypeError ("id must be of type integer")
+    
+    #geting the name of the corresponding zip file 
+    name = get_name(id, url) 
+
+    #downloading the zip file 
+    print("--- downloading file ",name," ---")
+    get_file(name, url)
+    
+    #creating data file
+    print("--- creating data file for previous zip file ---")
+    create_datafile(name)
+    
 
 if __name__ == "__main__":    
     
-    git pull
     
-    print(get_name(4104))
-    get_file(get_name(4104))
-    print("downloaded file ",get_name(4104))
