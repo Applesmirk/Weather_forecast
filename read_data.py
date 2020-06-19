@@ -1,6 +1,6 @@
 import csv
 
-def get_data(keys,station_id):
+def read_data(keys,station_id):
     """
     input a list of keywords to get list of data provided from a file 'daten.txt'
     """
@@ -23,5 +23,5 @@ def get_data(keys,station_id):
 #test for 
 #'MESS_DATUM' date of measurement 
 #'TMK' daily mean temperature
-data = get_data(['MESS_DATUM','TMK'],4104)
+data = read_data(['MESS_DATUM','TMK'],4104)
 print(data[-1])
