@@ -1,13 +1,23 @@
 import csv
 
+def get_data(keys):
+    """
+    input a list of keywords to get list of data provided from a file 'daten.txt'
+    """
+    data = []
+    with open('daten.txt') as f:
+        reader = csv.DictReader(f, delimiter = ';',skipinitialspace=True)
+        i=0
+        for row in reader:
+            data.append([])
+            for key in keys:
+                data[i].append(row[key])
+            i += 1
+    return data
 
-data = {}
-with open('daten.txt') as f:
-    reader = csv.DictReader(f, delimiter = ';',skipinitialspace=True)
-    for row in reader:
-        date = row['MESS_DATUM'] #YYYYMMDD
-        max_temp = row['TXK']  #2m über boden
-        sonnenscheindauer = row['SDK'] #in stunden
-        data[date] = max_temp,sonnenscheindauer
-        
-print(data)
+#test for 
+#'MESS_DATUM' date of measurement 
+#'TMK' daily mean temperature
+data = get_data(['MESS_DATUM','TMK'])
+
+print(data[-1])
