@@ -1,8 +1,28 @@
 import csv
 
-def read_data(keys,station_id):
+def read_data(station_id, keys = ['MESS_DATUM','TMK','SDK']):
     """
     input a list of keywords to get list of data provided from a file 'daten.txt'
+    expects:
+        keys: list consisting of elements like the following
+            'MESS_DATUM' Messdatum format YYYYMMDD
+            'FX' Tagesmaximum Windspitze in m/s
+            'FM' Tagesmittel Windgeschwindigkeit in m/s
+            'QN_4' Qualitätsniveau der nachfolgenden Spalten
+            'RSK' tägliche Niederschlagshöhe in mm
+            'RSKF' Niederschlagsform
+            'SDK' tägliche Sonnenscheindauer in h
+            'SHK_TAG' Tageswert Schneehöhe in cm
+            'NM' Tagesmittel des Bedeckungsgrades in 1/8 ?
+            'VPM' Tagesmittel des Dampfdruckes in hPa
+            'PM' Tagesmittel des Luftdrucks in hPa
+            'TMK' Tagesmittel der Temperatur in °C
+            'UPM' Tagesmittel der Relativen Feuchte in %
+            'TXK' Tagesmaximum der Lufttemperatur 2m Höhe in °C
+            'TNK' Tagesminimum der Lufttemperatur 2m Höhe in °C
+            'TGK' Minimum der Lufttemperatur am Erdboden 5cm Höhe in °C
+            
+        station_id: ID of the weather station
     """
 
     #station id has to have 5 digits
@@ -20,8 +40,6 @@ def read_data(keys,station_id):
             i += 1
     return data
 
-#test for 
-#'MESS_DATUM' date of measurement 
-#'TMK' daily mean temperature
-data = read_data(['MESS_DATUM','TMK'],4104)
+
+data = read_data(4104)
 print(data[-1])
