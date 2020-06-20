@@ -61,13 +61,17 @@ def learn(xtrain, ytrain):
     return model
     
 def test(xtest,ytest,model):
+    '''
+    tests the model and returns the predictions and the mean squared error 
+    expects:
+        xtest,ytest datasets
+        keras model
+    '''
     xtest = np.array(xtest)
     ytest = np.array(ytest)
     xtest = np.reshape(xtest ,(xtest.shape[0], xtest.shape[1] * xtest.shape[2]))
 
     error = model.evaluate(xtest, ytest, verbose=0)
-    print('Mean Squared error root',np.sqrt(error))
-    
-
     pred = model.predict(xtest)
-    print("predicted for:",xtest[0], "result", max(pred), "real result: ", max(ytest))
+    
+    return pred,error
