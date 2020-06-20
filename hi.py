@@ -1,1 +1,1 @@
-hi.py
+print('hi')
