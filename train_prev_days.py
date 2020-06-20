@@ -37,37 +37,37 @@ def split_data(xdata, ydata, faktor = .1, count = 0):
     	
     return (xdata,ydata), (xtest,ytest)
 
-def learn(xtrain, ytrain, xtest, ytest):
-  #  x reshape auf 2 dimens 2,3 dim zu einer 
+def learn(xtrain, ytrain):
+    '''
+    machine learning function returns the machine learning model
+    expects:
+        xtrain,ytrain training data
+    '''
+    #x reshape von days * keys dim zu einer dim
     xtrain = np.array(xtrain)
     ytrain = np.array(ytrain)
-    xtest = np.array(xtest)
-    ytest = np.array(ytest)
-    
     xtrain = np.reshape(xtrain ,(xtrain.shape[0], xtrain.shape[1] * xtrain.shape[2]))
-    xtest = np.reshape(xtest ,(xtest.shape[0], xtest.shape[1] * xtest.shape[2]))
-    print(xtest.shape,"y;",  ytrain.shape)
-    
+
     n_features = xtrain.shape[1]
     layersize = int(2*n_features/3)
     model = Sequential () 
-    model.add(Dense(layersize, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
-    model.add(Dense(int(layersize/2), activation='relu', kernel_initializer='he_normal'))
+    model.add(Dense(layersize, activation='relu', kernel_initializer='he_normal',input_shape=(n_features,)))
+    model.add(Dense(int(layersize/2), activation='relu', kernel_initializer='he_normal' ))
     model.add(Dense(1))
     
     model.compile(optimizer='adam', loss='mse')
+    model.fit(xtrain, ytrain, epochs=200, batch_size=500, verbose=0)
+
+    return model
     
-    model.fit(xtrain, ytrain, epochs=150, batch_size=32, verbose=0)
-    pred = (xtest[0,:])
-    
-    #pred = model.predict([pred])
-    
-    #print("predicted for:",xtest[0], "result", model.predict([xtest[0,:]]),"real result: ", ytest[0])
-    #loss, acc = model.evaluate(xtest, ytest, verbose=0)
-    #print('Test Accuracy: %.3f' % acc)
-    
-    
-    #xtrain = tf.cast(xtrain.reshape(xtrain.shape[0] , xtrain.shape[1] * xtrain.shape[2]), dtype=tf.float32)
-    #xtest = tf.cast(xtest.reshape(xtest.shape[0] , xtest.shape[1] * xtest.shape[2]),dtype=tf.float32)
+def test(xtest,ytest,model):
+    xtest = np.array(xtest)
+    ytest = np.array(ytest)
+    xtest = np.reshape(xtest ,(xtest.shape[0], xtest.shape[1] * xtest.shape[2]))
+
+    error = model.evaluate(xtest, ytest, verbose=0)
+    print('Mean Squared error root',np.sqrt(error))
     
 
+    pred = model.predict(xtest)
+    print("predicted for:",xtest[0], "result", max(pred), "real result: ", max(ytest))
