@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-def prepare_data_days(data, range_= 1, days=3): 
+def prepare_data_days(data, keyindex, range_= 1, days=3 ): 
 
     data = data.astype(float)
     data = data[:,1:]
@@ -12,7 +12,8 @@ def prepare_data_days(data, range_= 1, days=3):
         if i + days >= data.shape[0]: break 
         
         xdata.append(data[i:i + days,:])
-        ydata.append(data[i + days,:])
+        ydata.append(data[i + days, keyindex])
+
 
     return xdata, ydata
 
