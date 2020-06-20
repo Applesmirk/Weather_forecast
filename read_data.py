@@ -2,7 +2,7 @@ import csv
 import numpy as np
 from datetime import timedelta, date
 
-def read_data(station_id, keys = ['MESS_DATUM','TMK','SDK'],check = False):
+def read_data(station_id, keys = ['TMK','SDK'],check = False):
     """
     input a list of keywords to get list of data provided from a file 'daten.txt'
     expects:
@@ -29,6 +29,8 @@ def read_data(station_id, keys = ['MESS_DATUM','TMK','SDK'],check = False):
         
         *default
     """
+    
+    keys = ['MESS_DATUM'] + keys 
     if isinstance(station_id,int) != True : raise TypeError ("station_id must be of type integer")
    
     print("--- reading data from file ---")
