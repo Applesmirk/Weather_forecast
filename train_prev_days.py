@@ -1,8 +1,10 @@
 import numpy as np
+import tensorflow as tf
 
 def prepare_data_days(data, range_= 1, days=3): 
 
     data = data.astype(float)
+    data = data[:,1:]
     data = data[-(365*range_):,:]
     
     xdata, ydata = [], []
@@ -30,7 +32,16 @@ def split_data(xdata, ydata, faktor = .1, count = 0):
     xtest, ytest= xdata[start:end], ydata[start:end]
     del xdata[start:end]
     del ydata[start:end]
-
+    	
     return (xdata,ydata), (xtest,ytest)
+
+def learn(xtrain,ytrain,xtest,ytest):
+    xtrain = np.array(xtrain)
+    ytrain = np.array(ytrain)
+    xtest = np.array(xtest)
+    ytest = np.array(ytest)
+    print(xtrain.shape, ytrain.shape)
+    xtrain = tf.cast(xtrain.reshape(xtrain.shape[0] , xtrain.shape[1] * xtrain.shape[2]), dtype=tf.float32)
+    xtest = tf.cast(xtest.reshape(xtest.shape[0] , xtest.shape[1] * xtest.shape[2]),dtype=tf.float32)
     
 
