@@ -43,6 +43,8 @@ def learn(xtrain, ytrain):
     expects:
         xtrain,ytrain training data
     '''
+    print('--- creating model ---')
+
     #x reshape von days * keys dim zu einer dim
     xtrain = np.array(xtrain)
     ytrain = np.array(ytrain)
@@ -55,8 +57,9 @@ def learn(xtrain, ytrain):
     model.add(Dense(int(layersize/2), activation='relu', kernel_initializer='he_normal' ))
     model.add(Dense(1))
     
+
     model.compile(optimizer='adam', loss='mse')
-    model.fit(xtrain, ytrain, epochs=200, batch_size=500, verbose=0)
+    model.fit(xtrain, ytrain, epochs=200, batch_size=20, verbose=0)
 
     return model
     
