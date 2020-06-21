@@ -18,7 +18,7 @@ class locations:
 
 def get_city_models():
     '''
-
+    example: creating predictions for some citys
     '''
 
     stations = [
@@ -57,14 +57,9 @@ def get_city_models():
             pred_data.append(SDK[i])
             pred_data.append(RSK[i])
         pred_data = np.reshape(np.array(pred_data),(1,9))
-        print(pred_data.shape)
-        #pred_data = [ TMK[i],SDK[i],RSK[i] for i in range(j,j+3) ]
-        #print(pred_data)
         elem.prediction = elem.model.predict(pred_data)
-        print(elem.prediction)
         j += 3
 
-    
     # prepare data for plotting and  
     longitude = [] 
     altitude = [] 
@@ -75,16 +70,26 @@ def get_city_models():
         altitude.append(elem.altitude) # y valuess
         predictions.append(elem.prediction) # z values
         citys.append(elem.city) # name for scatter 
-        
-    #Interpolate over Data points 
-    f = Rbf (longitude, altitude, predictions)
-       
     
+    
+    fig, ax = plt.subplots() 
+    #interpolate points
+    f = Rbf (longitude, altitude, predictions)
+
+    x = np.linspace(min(longitude) - 0.1 , max(longitude) + 0.1, 100)
+    y = np.linspace(min(altitude) - 0.1, max(altitude) + 0.1, 100)
+    x,y = np.meshgrid(x,y)
+    znew = f(x,y)
+
+    #creating heatmap
+    c = ax.pcolormesh(x,y, znew, cmap='coolwarm', vmin=min(predictions), vmax=max(predictions))
+    ax.set_title('Temperature Prediction')
+    fig.colorbar(c, ax=ax)
+
     #Adding Citys with names to the plot 
-    fig, axs = plt.subplots() 
-    axs.scatter(longitude, altitude)
+    ax.scatter(longitude, altitude)
     for i, city in enumerate(citys): 
-        axs.annotate(city, (longitude[i], altitude[i]))
+        ax.annotate(city, (longitude[i], altitude[i]))
     
     plt.show()
     
