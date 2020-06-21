@@ -4,6 +4,8 @@ import numpy as np
 from train_prev_days import * 
 from validation import *
 import random
+import matplotlib.pyplot as plt 
+from scipy.interpolate import interp2d
 
 class locations:
     def __init__(self,city,station_id, altitude, longitude, prediction=0,model=0):
@@ -20,13 +22,13 @@ def get_city_models():
     '''
 
     stations = [
-    locations('Regensburg', 4104, 49013430, 12101634),
-    locations('Parsberg', 3875, 491603469, 117187275),
-    locations('Schwandorf', 4592, 49319888, 12109135),
-    locations('Schorndorf-Knöbling', 4559, 49160155, 12591019),
-    locations('Elsendorf-Horneck', 7075, 48708826, 11809827),
-    locations('Mallersdorf-Pfaffenberg', 3147, 48769303, 12227654),
-    locations('Straubing', 4911, 48877733, 12580154)
+    locations('Regensburg', 4104, 49.013430, 12.101634),
+    locations('Parsberg', 3875, 49.1603469, 11.7187275),
+    locations('Schwandorf', 4592, 49.319888, 12.109135),
+    locations('Schorndorf-Knöbling', 4559, 49.160155, 12.591019),
+    locations('Elsendorf-Horneck', 7075, 48.708826, 11.809827),
+    locations('Mallersdorf-Pfaffenberg', 3147, 48.769303, 12.227654),
+    locations('Straubing', 4911, 48.877733, 12.580154)
     ]
 
     #download the data for each station
@@ -61,7 +63,30 @@ def get_city_models():
         print(elem.prediction)
         j += 3
 
-    return 0
+    
+    
+    
+    # prepare data for plotting and  
+    longitude = [] 
+    altitude = [] 
+    predictions = [] 
+    citys = [] 
+    for elem in stations: 
+        longitude.append(elem.longitude) # x values 
+        altitude.append(elem.altitude) # y valuess
+        predictions.append(elem.prediction) # z values
+        citys.append(elem.city) # name for scatter 
+        
+    
+        
+    fig, axs = plt.subplots() 
+    axs.scatter(altitude, longitude)
+    for i, city in enumerate(citys): 
+        axs.annotate(city, (longitude[i], altitude[i]))
+    
+    plt.show()
+    
+    return 0 
 
 get_city_models()
 
