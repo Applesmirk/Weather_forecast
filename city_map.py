@@ -5,7 +5,7 @@ from train_prev_days import *
 from validation import *
 import random
 import matplotlib.pyplot as plt 
-from scipy.interpolate import interp2d
+from scipy.interpolate import Rbf
 
 class locations:
     def __init__(self,city,station_id, altitude, longitude, prediction=0,model=0):
@@ -36,6 +36,7 @@ def get_city_models():
         station_id = elem.station_id
         download_id(station_id)
 
+    #create the model for each station 
     for elem in stations:
         station_id = elem.station_id
         data = read_data(station_id,['TMK','SDK','RSK'])
@@ -64,8 +65,6 @@ def get_city_models():
         j += 3
 
     
-    
-    
     # prepare data for plotting and  
     longitude = [] 
     altitude = [] 
@@ -77,10 +76,13 @@ def get_city_models():
         predictions.append(elem.prediction) # z values
         citys.append(elem.city) # name for scatter 
         
+    #Interpolate over Data points 
+    f = Rbf (longitude, altitude, predictions)
+       
     
-        
+    #Adding Citys with names to the plot 
     fig, axs = plt.subplots() 
-    axs.scatter(altitude, longitude)
+    axs.scatter(longitude, altitude)
     for i, city in enumerate(citys): 
         axs.annotate(city, (longitude[i], altitude[i]))
     
